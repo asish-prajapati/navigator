@@ -11,7 +11,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+
 import TextField from "@material-ui/core/TextField";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Geocode from "react-geocode";
@@ -35,25 +35,23 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [latlong, setLatlong] = useState({ lat: "", long: "" });
+  const [latlong, setLatlong] = useState({ lat: "", lng: "" });
   const [open, setOpen] = useState(false);
 
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition(function (position) {
-      console.log("Latitude is :", position.coords.latitude);
-      console.log("Longitude is :", position.coords.longitude);
       setLatlong({
         lat: position.coords.latitude,
-        long: position.coords.longitude,
+        lng: position.coords.longitude,
       });
     });
   };
-  const reverseGeocode = (lat, long) => {
+  const reverseGeocode = (lat, lng) => {
     Geocode.setApiKey("AIzaSyBR3c3gbxWs4F-XgiRN2HTi70ow6bXsWvc");
     Geocode.setRegion("es");
     Geocode.setLocationType("ROOFTOP");
     Geocode.enableDebug();
-    Geocode.fromLatLng("48.8583701", "2.2922926").then(
+    Geocode.fromLatLng(lat, lng).then(
       (response) => {
         const address = response.results[0].formatted_address;
         console.log(address);
@@ -70,7 +68,7 @@ function App() {
 
   useEffect(() => {
     getLocation();
-    reverseGeocode(latlong.lat, latlong.long);
+    reverseGeocode(latlong.lat, latlong.lng);
   }, []);
   return (
     <div>
@@ -83,7 +81,7 @@ function App() {
             >
               <Typography variant="subtitle1">
                 Your Current Location is :
-                {`Lat: ${latlong.lat} , Long: ${latlong.long}`}
+                {`Lat: ${latlong.lat} , Long: ${latlong.lng}`}
               </Typography>
             </Button>
           </Box>

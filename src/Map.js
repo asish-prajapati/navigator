@@ -1,34 +1,26 @@
-import React, { Component } from "react";
-import { Map as MapG, GoogleApiWrapper, Marker } from "google-maps-react";
+import React from "react";
+import GoogleMapReact from "google-map-react";
+import RoomIcon from "@material-ui/icons/Room";
 
-const mapStyles = {
-  width: "100%",
+const Marker = () => (
+  <div>
+    <RoomIcon color="secondary" style={{ fontSize: 40 }} />
+  </div>
+);
 
-  height: "100%",
+const Map = (props) => {
+  const { lat, lng } = props.latlong;
+  return (
+    <div style={{ height: "100vh", width: "100%" }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "AIzaSyBR3c3gbxWs4F-XgiRN2HTi70ow6bXsWvc" }}
+        defaultCenter={props.latlong}
+        defaultZoom={11}
+      >
+        <Marker lat={lat} lng={lng} />
+      </GoogleMapReact>
+    </div>
+  );
 };
 
-class Map extends Component {
-  render() {
-    const { lat, long } = this.props.latlong;
-    return (
-      <div>
-        <MapG
-          google={this.props.google}
-          zoom={14}
-          style={mapStyles}
-          initialCenter={{
-            lat: lat,
-
-            lng: long,
-          }}
-        >
-          <Marker onClick={this.onMarkerClick} name={"This is test name"} />
-        </MapG>
-      </div>
-    );
-  }
-}
-
-export default GoogleApiWrapper({
-  apiKey: "AIzaSyBR3c3gbxWs4F-XgiRN2HTi70ow6bXsWvc",
-})(Map);
+export default Map;
