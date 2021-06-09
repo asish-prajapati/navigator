@@ -9,6 +9,7 @@ const mapStyles = {
 
 class Map extends Component {
   render() {
+    const { lat, long } = this.props.latlong;
     return (
       <div>
         <MapG
@@ -16,9 +17,9 @@ class Map extends Component {
           zoom={14}
           style={mapStyles}
           initialCenter={{
-            lat: this.props.latlong.lat,
+            lat: lat,
 
-            lng: this.props.latlong.long,
+            lng: long,
           }}
         >
           <Marker onClick={this.onMarkerClick} name={"This is test name"} />

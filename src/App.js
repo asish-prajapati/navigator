@@ -14,6 +14,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import Geocode from "react-geocode";
 
 import "./App.css";
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [latlong, setLatlong] = useState({ lat: "", long: "" });
+  const [latlong, setLatlong] = useState({});
   const [open, setOpen] = useState(false);
 
   const getLocation = () => {
@@ -47,6 +48,21 @@ function App() {
       });
     });
   };
+  const reverseGeocode = (lat, long) => {
+    Geocode.setApiKey("AIzaSyBR3c3gbxWs4F-XgiRN2HTi70ow6bXsWvc");
+    Geocode.setRegion("es");
+    Geocode.setLocationType("ROOFTOP");
+    Geocode.enableDebug();
+    Geocode.fromLatLng("48.8583701", "2.2922926").then(
+      (response) => {
+        const address = response.results[0].formatted_address;
+        console.log(address);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -54,6 +70,7 @@ function App() {
 
   useEffect(() => {
     getLocation();
+    reverseGeocode(latlong.lat, latlong.long);
   }, []);
   return (
     <div>
@@ -84,9 +101,7 @@ function App() {
         <Divider />
       </Drawer>
 
-      <div>
-        <Map latlong={latlong} />
-      </div>
+      <div>{latlong.lat !== "" && <Map latlong={latlong} />}</div>
     </div>
   );
 }
