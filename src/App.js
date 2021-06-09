@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [latlong, setLatlong] = useState({});
+  const [latlong, setLatlong] = useState({ lat: "", long: "" });
   const [open, setOpen] = useState(false);
 
   const getLocation = () => {
