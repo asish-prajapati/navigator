@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Map from "./Map";
+
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,9 +11,9 @@ import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-
+import RoomIcon from "@material-ui/icons/Room";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 import get_location from "./helpers/get_location";
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     width: 300,
+  },
+  fontColor: {
+    color: "white",
+    display: "inline",
   },
 }));
 
@@ -64,7 +69,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="secondary">
         <Toolbar>
           <Box className={classes.title}>
             <Button
@@ -72,8 +77,14 @@ function App() {
               startIcon={<ArrowDropDownIcon />}
             >
               <Typography variant="subtitle1">
-                Your Current Location is :
-                {`Lat: ${latlong.lat} , Long: ${latlong.lng}`}
+                Your Current Location is : LAT=
+                <Typography variant="subtitle1" className={classes.fontColor}>
+                  {latlong.lat}
+                </Typography>
+                , LNG=
+                <Typography variant="subtitle1" className={classes.fontColor}>
+                  {latlong.lng}
+                </Typography>
               </Typography>
             </Button>
           </Box>
@@ -84,8 +95,18 @@ function App() {
       <Drawer anchor="left" open={open} onClose={toggleDrawer}>
         <List>
           <ListItem>
-            <ListItemIcon></ListItemIcon>
-            <TextField id="standard-basic" label="Search" />
+            <TextField
+              color="secondary"
+              id="standard-basic"
+              label="Search"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <RoomIcon color="secondary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </ListItem>
         </List>
         <Divider />
