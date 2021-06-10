@@ -14,7 +14,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 import TextField from "@material-ui/core/TextField";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import Geocode from "react-geocode";
+
+import get_location from "./helpers/get_location";
+import reverse_geocode from "./helpers/reverse_geocode";
 
 import "./App.css";
 
@@ -38,28 +40,17 @@ function App() {
   const [latlong, setLatlong] = useState({ lat: "", lng: "" });
   const [open, setOpen] = useState(false);
 
-  const getLocation = () => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLatlong({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
+  const getLocation = async () => {
+    let { lat, lng } = await get_location();
+    setLatlong({
+      lat: lat,
+      lng: lng,
     });
   };
-  const reverseGeocode = (lat, lng) => {
-    Geocode.setApiKey("AIzaSyBR3c3gbxWs4F-XgiRN2HTi70ow6bXsWvc");
-    Geocode.setRegion("es");
-    Geocode.setLocationType("ROOFTOP");
-    Geocode.enableDebug();
-    Geocode.fromLatLng(lat, lng).then(
-      (response) => {
-        const address = response.results[0].formatted_address;
-        console.log(address);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+
+  const reverseGeocode = async (lat, lng) => {
+    let address_data = await reverse_geocode(lat, lng);
+    console.log(address_data);
   };
 
   const toggleDrawer = () => {
@@ -70,8 +61,9 @@ function App() {
     getLocation();
     reverseGeocode(latlong.lat, latlong.lng);
   }, []);
+
   return (
-    <div>
+    <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
           <Box className={classes.title}>
